@@ -35,6 +35,22 @@ lfg --update
 
 Both commands let Homebrew manage the installed files.
 
+## Install ChatGPT (Linux)
+
+Install the [ChatGPT desktop app for Linux](https://learn.chatgpt.com/docs/linux/linux-app)
+(preview, x64 and ARM64):
+
+```sh
+brew install --cask leoxlin/craftbeer/chatgpt
+```
+
+Homebrew may require trusting the tap first: `brew trust leoxlin/craftbeer`.
+The upstream download always serves the latest build, so update with:
+
+```sh
+brew upgrade --cask --greedy-latest leoxlin/craftbeer/chatgpt
+```
+
 ## Other packages
 
 Formulae and casks added to this tap are available without extra setup:
