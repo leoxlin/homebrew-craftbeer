@@ -23,7 +23,28 @@ cask "chatgpt" do
   end
 
   postflight do
+    xdg_data = Pathname.new(ENV["HOME"])/".local/share"
+    (xdg_data/"applications").mkpath
+    (xdg_data/"pixmaps").mkpath
+
+    icon = xdg_data/"pixmaps/chatgpt.png"
+    FileUtils.cp staged_path/"payload/usr/share/pixmaps/chatgpt.png", icon
+
+    desktop_file = xdg_data/"applications/chatgpt.desktop"
+    FileUtils.cp staged_path/"payload/usr/share/applications/chatgpt.desktop", desktop_file
+    contents = desktop_file.read
+    contents.sub!(%r{^Exec=.*$}, "Exec=#{appdir}/chatgpt/codex-launcher %U")
+    contents.sub!(%r{^Icon=.*$}, "Icon=#{icon}")
+    desktop_file.write contents
+
     FileUtils.rm_r(staged_path/"payload")
+  end
+
+  uninstall_postflight do
+    FileUtils.rm_f [
+      Pathname.new(ENV["HOME"])/".local/share/applications/chatgpt.desktop",
+      Pathname.new(ENV["HOME"])/".local/share/pixmaps/chatgpt.png",
+    ]
   end
 
   caveats <<~EOS
